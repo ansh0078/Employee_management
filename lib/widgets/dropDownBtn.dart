@@ -3,7 +3,6 @@ import 'package:employee_management/controller/countryController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// ignore: must_be_immutable
 class CountryDropdown extends StatelessWidget {
   final TextEditingController country;
   const CountryDropdown({super.key, required this.country});
@@ -16,11 +15,10 @@ class CountryDropdown extends StatelessWidget {
         children: [
           DropdownButtonFormField<CountryModel>(
             validator: (value) {
-              // Convert the CountryModel to a string for validation
               if (value == null || value.country == null || value.country!.isEmpty) {
                 return 'Please select a country';
               }
-              return null; // Return null if validation is successful
+              return null;
             },
             decoration: InputDecoration(
                 labelText: "select Country",

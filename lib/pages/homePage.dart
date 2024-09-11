@@ -45,26 +45,55 @@ class Homepage extends StatelessWidget {
               if (filteredList.isEmpty) {
                 return const Center(child: Text('No matching users found'));
               }
-              return ListView.builder(
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  final user = filteredList[index];
-                  return ListTile(
-                    leading: Text(
-                      user.id.toString(),
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    title: Text(
-                      user.name.toString(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    subtitle: Text(
-                      user.emailId.toString(),
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.delete_outline_rounded)),
-                  );
-                },
+              return RefreshIndicator(
+                onRefresh: () => userController.getUserDetails(),
+                child: ListView.builder(
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final user = filteredList[index];
+                    return ListTile(
+                      leading: Text(
+                        user.id.toString(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      title: Text(
+                        user.name.toString(),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      subtitle: Text(
+                        user.emailId.toString(),
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Delete User'),
+                              content: Text('Are you sure you want to delete ${user.name}?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    userController.deleteUser(user.id!);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               );
             }),
           ),

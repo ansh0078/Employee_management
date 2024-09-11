@@ -15,6 +15,13 @@ class AddPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Add User'),
+        leading: InkWell(
+          onTap: () {
+            Get.back();
+            userController.getUserDetails();
+          },
+          child: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Obx(
         () => userController.isLoading.value
@@ -110,7 +117,7 @@ class AddPage extends StatelessWidget {
                             PrimaryBtn(
                               btnName: "Submit",
                               ontap: () {
-                                if(_formKey.currentState!.validate()){
+                                if (_formKey.currentState!.validate()) {
                                   userController.addUser();
                                 }
                               },

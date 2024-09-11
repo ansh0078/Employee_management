@@ -1,5 +1,5 @@
 import 'package:employee_management/pages/addPage.dart';
-import 'package:employee_management/pages/editPage.dart';
+import 'package:employee_management/pages/homePage.dart';
 import 'package:flutter/material.dart';
 
 class AppBarActions extends StatelessWidget {
@@ -17,11 +17,11 @@ class AppBarActions extends StatelessWidget {
               ),
             );
             break;
-          case 'Edit':
+          case 'Refresh':
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const EditPage(),
+                builder: (context) => const Homepage(),
               ),
             );
             break;
@@ -43,12 +43,12 @@ class AppBarActions extends StatelessWidget {
             ),
           ),
           PopupMenuItem<String>(
-            value: 'Edit',
+            value: 'Refresh',
             child: Row(
               children: [
-                const Icon(Icons.edit_outlined, size: 18),
+                const Icon(Icons.refresh_outlined, size: 18),
                 const SizedBox(width: 10),
-                Text('Edit User', style: Theme.of(context).textTheme.bodyLarge),
+                Text('Refresh User', style: Theme.of(context).textTheme.bodyLarge),
               ],
             ),
           ),

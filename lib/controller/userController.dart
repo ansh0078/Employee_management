@@ -91,4 +91,20 @@ class UserController extends GetxController {
           .toList();
     }
   }
+
+  Future<void> deleteUser(String id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('https://669b3f09276e45187d34eb4e.mockapi.io/api/v1/employee/$id'),
+      );
+      if (response.statusCode == 200) {
+        successMessage("User deleted successfully");
+        getUserDetails();
+      } else {
+        errorMessage("Failed to delete the user");
+      }
+    } catch (e) {
+      errorMessage("An error occurred while deleting the user");
+    }
+  }
 }
