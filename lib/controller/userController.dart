@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class UserController extends GetxController {
   var userList = <UserModel>[].obs;
+  final String apiUrl = 'https://669b3f09276e45187d34eb4e.mockapi.io/api/v1/employee';
   RxBool isLoading = false.obs;
   RxString searchQuery = ''.obs;
 
@@ -36,7 +37,7 @@ class UserController extends GetxController {
       );
 
       final response = await http.post(
-        Uri.parse('https://669b3f09276e45187d34eb4e.mockapi.io/api/v1/employee'),
+        Uri.parse(apiUrl),
         headers: {
           "Content-Type": "application/json"
         },
@@ -61,9 +62,7 @@ class UserController extends GetxController {
   Future<void> getUserDetails() async {
     try {
       isLoading.value = true;
-      final response = await http.get(
-        Uri.parse("https://669b3f09276e45187d34eb4e.mockapi.io/api/v1/employee"),
-      );
+      final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
@@ -94,9 +93,7 @@ class UserController extends GetxController {
 
   Future<void> deleteUser(String id) async {
     try {
-      final response = await http.delete(
-        Uri.parse('https://669b3f09276e45187d34eb4e.mockapi.io/api/v1/employee/$id'),
-      );
+      final response = await http.delete(Uri.parse('$apiUrl/$id'));
       if (response.statusCode == 200) {
         successMessage("User deleted successfully");
         getUserDetails();
@@ -105,6 +102,42 @@ class UserController extends GetxController {
       }
     } catch (e) {
       errorMessage("An error occurred while deleting the user");
+    }
+  }
+
+  Future<void> updateUser(String id) async {
+    try {
+      isLoading.value = true;
+      UserModel updatedUser = UserModel(
+        createdAt: DateTime.now().toIso8601String(), // or the original creation date if needed
+        name: nameController.text,
+        avatar: avatarController.text,
+        emailId: emailController.text,
+        mobile: mobileController.text,
+        country: countryController.text,
+        state: stateController.text,
+        district: districtController.text,
+      );
+
+      final response = await http.put(
+        Uri.parse('$apiUrl/$id'),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: jsonEncode(updatedUser.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        successMessage("User updated successfully");
+        Get.to(const Homepage());
+      } else {
+        errorMessage("Unable to update the user");
+      }
+    } catch (e) {
+      errorMessage("Error $e");
+    } finally {
+      isLoading.value = false;
+      getUserDetails();
     }
   }
 }

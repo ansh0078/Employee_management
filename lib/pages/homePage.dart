@@ -1,4 +1,5 @@
 import 'package:employee_management/controller/userController.dart';
+import 'package:employee_management/pages/editPage.dart';
 import 'package:employee_management/widgets/appBarAction.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,32 +65,44 @@ class Homepage extends StatelessWidget {
                         user.emailId.toString(),
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Delete User'),
-                              content: Text('Are you sure you want to delete ${user.name}?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('Cancel'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                Get.to(EditPage(
+                                  id: user.id.toString(),
+                                ));
+                              },
+                              icon: const Icon(Icons.edit_rounded)),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Delete User'),
+                                  content: Text('Are you sure you want to delete ${user.name}?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        userController.deleteUser(user.id!);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    userController.deleteUser(user.id!);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Delete'),
-                                ),
-                              ],
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.delete_outline_rounded,
                             ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.delete_outline_rounded,
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
